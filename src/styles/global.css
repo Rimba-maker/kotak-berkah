@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+/* Starbucks token overrides available globally if needed */
+@theme {
+  --color-green: #006241;
+  --color-green-accent: #00754A;
+  --color-green-house: #1E3932;
+  --color-green-light: #d4e9e2;
+  --color-gold: #cba258;
+  --color-canvas: #f2f0eb;
+  --color-ceramic: #edebe9;
+
+  --font-sans: 'Nunito Sans', 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Lora', 'Iowan Old Style', Georgia, serif;
+}
