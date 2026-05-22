@@ -24,3 +24,6 @@ pnpm-debug.log*
 
 # Astro
 .astro/
+
+# PRD
+*-PRD.md
