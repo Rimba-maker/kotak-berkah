@@ -101,6 +101,7 @@ export default function TestimonialCarousel() {
           {testimonials.map((_, i) => (
             <motion.button
               key={i}
+              type="button"
               layoutId={i === index ? 'active-dot' : undefined}
               onClick={() => next(i > index ? 1 : -1)}
               style={{
@@ -122,6 +123,7 @@ export default function TestimonialCarousel() {
       {/* Prev / Next */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 20 }}>
         <button
+          type="button"
           onClick={() => next(-1)}
           style={{
             width: 40, height: 40, borderRadius: '50%', border: '1.5px solid var(--green-accent)',
@@ -132,6 +134,7 @@ export default function TestimonialCarousel() {
           aria-label="Sebelumnya"
         >‹</button>
         <button
+          type="button"
           onClick={() => next(1)}
           style={{
             width: 40, height: 40, borderRadius: '50%', border: 'none',

@@ -10,14 +10,11 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/react": "^4.2.0",
-    "astro": "^5.7.0",
-    "framer-motion": "^12.9.0",
+    "@astrojs/react": "^5.0.5",
+    "astro": "^6.3.7",
+    "framer-motion": "^12.40.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": ["esbuild", "sharp"]
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.0",
@@ -25,5 +22,11 @@
     "@types/react-dom": "^19.0.0",
     "tailwindcss": "^4.1.0",
     "typescript": "^5.7.0"
+  },
+  "resolutions": {
+    "devalue": "^5.8.1"
+  },
+  "overrides": {
+    "devalue": "^5.8.1"
   }
 }
