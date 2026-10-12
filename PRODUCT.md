@@ -30,6 +30,10 @@ Pemesan perlu mencocokkan tanggal acara, jumlah kotak, lokasi, anggaran, dan men
 - PRD menyatakan booking H-3 untuk standar, H-7 untuk Platinum, DP 30%, serta layanan Jabodetabek/Bandung. Ketentuan ini adalah baseline PRD dan belum diverifikasi secara komersial.
 - Nomor WhatsApp yang dipakai implementasi: 6282268116531. Label telepon footer sekarang diselaraskan dengan tujuan tautan. Status nomor sebagai kontak resmi usaha tetap perlu dipastikan pemilik sebelum publikasi.
 - Tidak ada backend pembayaran atau pemesanan terkonfirmasi. Website tidak boleh mengklaim reservasi tanggal, penerimaan pesanan, atau pembayaran berhasil hanya karena WhatsApp dibuka.
+- Toolchain keamanan: Astro 7.3.8, Tailwind 4.3.3, dan pnpm 11.28.5; CI menggunakan Node 22 dan package manager yang sama. `compressHTML: true` mempertahankan perilaku whitespace sebelum migrasi Astro 7.
+- `pnpm-workspace.yaml` menetapkan override bersyarat untuk esbuild yang terdampak dan patch lokal `http-cache-semantics@4.3.0`. esbuild tidak ada pada graph dependency aktif saat verifikasi ini; override menjaga resolusi versi terdampak jika kembali diperlukan.
+- Patch cache di `patches/http-cache-semantics@4.3.0.patch` menangani aturan revalidation, stale fallback, dan pemisahan identitas request, termasuk permintaan `Cache-Control: no-cache`/`Pragma: no-cache`. Tracking upstream: https://github.com/kornelski/http-cache-semantics/pull/63. GHSA-ch52-4w7c-c8xp masih diperdebatkan dan belum memiliki rilis patch resmi; update 4.3.0 saja tidak membuktikan perilaku tersebut aman.
+- `npm test` menjalankan 18 regression test terhadap dependency cache yang benar-benar dipakai Astro. CI menjalankannya sebelum job deployment. Saat memperbarui library cache, hapus patch hanya setelah versi upstream memenuhi test yang sama dan regenerasikan lockfile; jangan mengabaikan advisory untuk mendapatkan audit bersih.
 
 ## Brand Commitments
 
