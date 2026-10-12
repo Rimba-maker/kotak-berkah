@@ -19,8 +19,10 @@ jobs:
       - name: Install, build, and upload your site
         uses: withastro/action@v3
         with:
-          package-manager: pnpm@11
+          package-manager: pnpm@11.28.5
           node-version: 22
+      - name: Verify cache policy security regressions
+        run: npm test
 
   deploy:
     needs: build
