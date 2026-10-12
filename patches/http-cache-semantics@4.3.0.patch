@@ -1,0 +1,95 @@
+diff --git a/index.js b/index.js
+index 56c26025074cbcf218e3ec4d810662da93f8024e..37c6ede4171efacfe890ed5ea65349d886c3cd2f 100644
+--- a/index.js
++++ b/index.js	
+@@ -132,7 +132,7 @@ function parseCacheControl(header) {
+     const parts = header.trim().split(/,/);
+     for (const part of parts) {
+         const [k, v] = part.split(/=/, 2);
+-        cc[k.trim()] = v === undefined ? true : v.trim().replace(/^"|"$/g, '');
++        cc[k.trim().toLowerCase()] = v === undefined ? true : v.trim().replace(/^"|"$/g, '');
+     }
+ 
+     return cc;
+@@ -395,8 +395,7 @@ module.exports = class CachePolicy {
+     evaluateRequest(req) {
+         this._assertRequestHasHeaders(req);
+ 
+-        // In all circumstances, a cache MUST NOT ignore the must-revalidate directive
+-        if (this._rescc['must-revalidate']) {
++        if (!this._allowsReuse()) {
+             return this._evaluateRequestMissResult(req);
+         }
+ 
+@@ -409,7 +408,7 @@ module.exports = class CachePolicy {
+         // unless the stored response is successfully validated (Section 4.3), and
+         const requestCC = parseCacheControl(req.headers['cache-control']);
+ 
+-        if (requestCC['no-cache'] || /no-cache/.test(req.headers.pragma)) {
++        if (requestCC['no-cache'] || /no-cache/i.test(req.headers.pragma)) {
+             return this._evaluateRequestMissResult(req);
+         }
+ 
+@@ -640,9 +639,6 @@ module.exports = class CachePolicy {
+         }
+ 
+         if (this._isShared) {
+-            if (this._rescc['proxy-revalidate']) {
+-                return 0;
+-            }
+             // if a response includes the s-maxage directive, a shared cache recipient MUST ignore the Expires field.
+             if (this._rescc['s-maxage']) {
+                 return toNumberOrZero(this._rescc['s-maxage']);
+@@ -702,11 +698,31 @@ module.exports = class CachePolicy {
+         return this.maxAge() <= this.age();
+     }
+ 
++    _allowsReuse() {
++        if (!this.storable() || this._rescc['no-cache']) {
++            return false;
++        }
++        if (!this.stale()) {
++            return true;
++        }
++        return !(
++            this._rescc['must-revalidate'] ||
++            (this._isShared && (
++                this._rescc['proxy-revalidate'] ||
++                's-maxage' in this._rescc ||
++                (this._resHeaders['set-cookie'] &&
++                    !this._rescc.public &&
++                    !this._rescc.immutable)
++            ))
++        );
++    }
++
+     /**
+      * @returns {boolean} `true` if `stale-if-error` condition allows use of a stale response.
+      */
+     _useStaleIfError() {
+-        return this.maxAge() + toNumberOrZero(this._rescc['stale-if-error']) > this.age();
++        const allowance = toNumberOrZero(this._rescc['stale-if-error']);
++        return allowance > 0 && this._allowsReuse() && this.maxAge() + allowance > this.age();
+     }
+ 
+     /** See `evaluateRequest()` for a more complete solution
+@@ -714,7 +730,7 @@ module.exports = class CachePolicy {
+      */
+     useStaleWhileRevalidate() {
+         const swr = toNumberOrZero(this._rescc['stale-while-revalidate']);
+-        return swr > 0 && this.maxAge() + swr > this.age();
++        return swr > 0 && this._allowsReuse() && this.maxAge() + swr > this.age();
+     }
+ 
+     /**
+@@ -855,7 +871,9 @@ module.exports = class CachePolicy {
+     revalidatedPolicy(request, response) {
+         this._assertRequestHasHeaders(request);
+ 
+-        if (this._useStaleIfError() && isErrorResponse(response)) {
++        const requiresValidation = parseCacheControl(request.headers['cache-control'])['no-cache'] ||
++            /no-cache/i.test(request.headers.pragma);
++        if (!requiresValidation && this._requestMatches(request, true) && this._useStaleIfError() && isErrorResponse(response)) {
+           return {
+               policy: this,
+               modified: false,

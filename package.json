@@ -2,25 +2,21 @@
   "name": "kotak-berkah",
   "type": "module",
   "version": "0.1.0",
+  "packageManager": "pnpm@11.28.5",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "node --test"
   },
   "dependencies": {
-    "astro": "^6.3.7"
+    "astro": "^7.3.8"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.1.0",
-    "tailwindcss": "^4.1.0",
-    "typescript": "^5.7.0"
-  },
-  "resolutions": {
-    "devalue": "^5.8.1"
-  },
-  "overrides": {
-    "devalue": "^5.8.1"
+    "@tailwindcss/vite": "^4.3.3",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3"
   }
 }

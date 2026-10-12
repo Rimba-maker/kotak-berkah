@@ -8,4 +8,5 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   output: 'static',
+  compressHTML: true,
 });
