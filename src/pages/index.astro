@@ -1,966 +1,117 @@
 ---
-import HeroStats from '../components/HeroStats';
-import TestimonialCarousel from '../components/TestimonialCarousel';
+import '../styles/global.css';
+import { photos, heroPhotoId, type Photo } from '../data/photography';
+const base = import.meta.env.BASE_URL;
+const asset = (path: string) => `${base.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
+const hero = photos.find((photo) => photo.id === heroPhotoId)!;
+const food = photos.filter((photo) => ['nusantara', 'western', 'asian', 'vegetarian'].includes(photo.category));
+const ingredients = photos.filter((photo) => photo.category === 'ingredients');
+const packaging = photos.filter((photo) => photo.category === 'packaging');
+const occasions = photos.filter((photo) => photo.category === 'occasion');
+const heroSecondary = food.find((photo) => photo.id !== heroPhotoId)!;
+const heroDetail = ingredients[0] ?? food[2];
+const stages = [
+  { id: 'menu', label: 'Menu pilihan', photo: hero, caption: 'Rasa yang mengundang untuk berkumpul.' },
+  { id: 'kemasan', label: 'Dalam satu kotak', photo: packaging[1], caption: 'Ilustrasi makanan dalam kemasan.' },
+  { id: 'acara', label: 'Untuk acara Anda', photo: occasions[0], caption: 'Inspirasi suasana acara, bukan dokumentasi klien.' },
+];
+const money = (value: number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(value);
+const photoTitle = (photo: Photo) => photo.id.replace(/-/g, ' ').replace(/^./, (letter) => letter.toUpperCase());
+const packages = [
+  { name: 'Bronze', price: 25000, min: 50, note: 'Sederhana, tetap istimewa.', items: ['Nasi putih', '1 protein utama', '1 sayur, kerupuk & buah', 'Air mineral'], choices: 'Ayam goreng, ayam bakar, atau semur daging.' },
+  { name: 'Silver', price: 35000, min: 50, note: 'Lebih banyak rasa untuk dibagi.', items: ['Nasi putih atau uduk', '2 protein pilihan', '1 sayur, kerupuk, buah & dessert', 'Air mineral'], choices: 'Rendang, ayam betutu, atau ikan dori.' },
+  { name: 'Gold', price: 50000, min: 50, note: 'Lengkap untuk hari yang penting.', items: ['Nasi putih, uduk, atau kebuli', '3 protein & 2 sayur', 'Lalapan, sambal, buah & dessert premium', 'Air mineral'], choices: 'Rendang sapi, gulai ayam, dendeng balado, atau ikan kakap.' },
+  { name: 'Platinum', price: 75000, min: 100, note: 'Jamuan untuk momen spesial.', items: ['Appetizer & 4 protein', 'Main course premium', 'Dessert & fresh fruit', 'Air mineral atau jus'], choices: 'Untuk pernikahan dan corporate executive event.' },
+];
+const menuCategories = [{ value: 'all', label: 'Semua menu' }, { value: 'nusantara', label: 'Nusantara' }, { value: 'western', label: 'Western' }, { value: 'asian', label: 'Asian Fusion' }, { value: 'vegetarian', label: 'Vegetarian' }];
+const occasionCategory = (photo: Photo) => ({ 'acara-taman': 'wedding', 'rapat-kantor': 'corporate', 'belajar-bersama': 'education', 'kumpul-keluarga': 'social' } as Record<string, string>)[photo.id];
+const occasionLabels: Record<string, string> = { wedding: 'Pernikahan', corporate: 'Acara kantor', education: 'Pendidikan', social: 'Kumpul keluarga' };
+const whatsapp = 'https://wa.me/6282268116531?text=Halo%20Kotak%20Berkah%2C%20saya%20ingin%20konsultasi%20catering.';
+const schema = { '@context': 'https://schema.org', '@type': 'FoodEstablishment', name: 'Kotak Berkah Catering', description: 'Catering nasi kotak dengan cita rasa rumahan untuk acara keluarga, kantor, dan pernikahan.', servesCuisine: ['Indonesian', 'Asian', 'Western'], telephone: '+6282268116531', priceRange: 'Rp25.000–Rp75.000 per kotak' };
 ---
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kotak Berkah Catering — Nasi Kotak Premium Jabodetabek</title>
-  <meta name="description" content="Catering nasi kotak premium untuk wedding, corporate event, & syukuran. Halal MUI, on-time guarantee, 1.200+ event sejak 2019. Konsultasi gratis WA." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet" />
-  <style>
-    /* ─── STARBUCKS TOKENS ─── */
-    :root {
-      --green:         #006241;
-      --green-accent:  #00754A;
-      --green-house:   #1E3932;
-      --green-uplift:  #2b5148;
-      --green-light:   #d4e9e2;
-      --gold:          #cba258;
-      --gold-lightest: #faf6ee;
-      --canvas:        #f2f0eb;
-      --ceramic:       #edebe9;
-      --white:         #ffffff;
-      --text:          rgba(0,0,0,0.87);
-      --text-soft:     rgba(0,0,0,0.58);
-      --on-dark:       rgba(255,255,255,1);
-      --on-dark-soft:  rgba(255,255,255,0.70);
-      --font:         'Nunito Sans', 'Helvetica Neue', Arial, sans-serif;
-      --font-serif:   'Lora', 'Iowan Old Style', Georgia, serif;
-      --radius-card:  12px;
-      --radius-btn:   50px;
-      --shadow-card:  0 0 0.5px rgba(0,0,0,0.14), 0 1px 1px rgba(0,0,0,0.24);
-      --shadow-nav:   0 1px 3px rgba(0,0,0,0.1), 0 2px 2px rgba(0,0,0,0.06), 0 0 2px rgba(0,0,0,0.07);
-      --shadow-frap:  0 0 6px rgba(0,0,0,0.24), 0 8px 12px rgba(0,0,0,0.14);
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 62.5%; scroll-behavior: smooth; }
-    body {
-      font-family: var(--font);
-      font-size: 1.6rem;
-      line-height: 1.5;
-      letter-spacing: -0.01em;
-      color: var(--text);
-      background: var(--canvas);
-      padding-top: 72px;
-    }
-
-    /* ─── BUTTONS ─── */
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 26px; border-radius: var(--radius-btn);
-      font-family: var(--font); font-size: 1.5rem; font-weight: 600;
-      letter-spacing: -0.01em; border: 1.5px solid transparent;
-      cursor: pointer; transition: all 0.2s ease;
-      text-decoration: none; white-space: nowrap;
-    }
-    .btn:active { transform: scale(0.95); }
-    .btn-primary  { background: var(--green-accent); color: var(--white); border-color: var(--green-accent); }
-    .btn-primary:hover { background: var(--green); border-color: var(--green); }
-    .btn-outline  { background: transparent; color: var(--green-accent); border-color: var(--green-accent); }
-    .btn-outline:hover { background: rgba(0,117,74,0.07); }
-    .btn-on-dark  { background: var(--white); color: var(--green-accent); border-color: var(--white); }
-    .btn-on-dark:hover { background: rgba(255,255,255,0.9); }
-    .btn-outline-dark { background: transparent; color: var(--white); border-color: rgba(255,255,255,0.7); }
-    .btn-outline-dark:hover { background: rgba(255,255,255,0.08); }
-
-    /* ─── LAYOUT ─── */
-    .section { padding: 64px 40px; }
-    .container { max-width: 1200px; margin: 0 auto; }
-    .section-header { text-align: center; margin-bottom: 48px; }
-    .section-label {
-      font-size: 1.2rem; font-weight: 700; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--green-accent); margin-bottom: 8px;
-    }
-    .section-title {
-      font-size: 3.2rem; font-weight: 700; color: var(--green);
-      letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 12px;
-    }
-    .section-sub { font-size: 1.7rem; color: var(--text-soft); line-height: 1.65; max-width: 560px; margin: 0 auto; }
-
-    /* ─── NAVBAR ─── */
-    .navbar {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: var(--white); box-shadow: var(--shadow-nav);
-      height: 72px; display: flex; align-items: center; padding: 0 40px;
-    }
-    .navbar-inner {
-      display: flex; align-items: center; justify-content: space-between;
-      width: 100%; max-width: 1200px; margin: 0 auto;
-    }
-    .navbar-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .logo-mark {
-      width: 38px; height: 38px; border-radius: 50%;
-      background: var(--green); display: flex; align-items: center; justify-content: center;
-    }
-    .logo-mark span { color: white; font-size: 1.3rem; font-weight: 700; }
-    .logo-text { font-size: 1.6rem; font-weight: 700; color: var(--green); letter-spacing: -0.02em; }
-    .navbar-links { display: flex; align-items: center; gap: 36px; list-style: none; }
-    .navbar-links a { font-size: 1.4rem; font-weight: 600; color: var(--text); text-decoration: none; transition: color 0.2s; }
-    .navbar-links a:hover { color: var(--green-accent); }
-
-    /* ─── HERO ─── */
-    #hero {
-      background: var(--canvas);
-      padding: 72px 40px 64px;
-      min-height: calc(100vh - 72px);
-      display: flex; align-items: center;
-    }
-    .hero-inner {
-      display: grid; grid-template-columns: 60fr 40fr;
-      gap: 64px; align-items: center;
-      max-width: 1200px; margin: 0 auto;
-    }
-    .hero-eyebrow {
-      font-size: 1.2rem; font-weight: 700; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--green-accent); margin-bottom: 20px;
-    }
-    .hero-title {
-      font-family: var(--font-serif);
-      font-size: 5.4rem; font-weight: 600;
-      color: var(--green); line-height: 1.12;
-      letter-spacing: -0.5px; margin-bottom: 20px;
-    }
-    .hero-sub {
-      font-size: 1.8rem; color: var(--text-soft);
-      line-height: 1.65; max-width: 480px; margin-bottom: 32px;
-    }
-    /* hero stats rendered by React island — styled inline in HeroStats.tsx */
-    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-
-    .hero-visual {
-      position: relative; border-radius: 20px; overflow: hidden;
-      aspect-ratio: 4/5;
-      box-shadow: 0 12px 48px rgba(0,0,0,0.14);
-    }
-    .hero-img-bg {
-      width: 100%; height: 100%;
-      background: linear-gradient(160deg, #a8d5c2 0%, #4a9e7f 40%, #1E3932 100%);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .hero-img-placeholder {
-      text-align: center; padding: 40px; color: rgba(255,255,255,0.85);
-    }
-    .hero-img-placeholder svg { opacity: 0.7; margin-bottom: 12px; }
-    .hero-img-placeholder p { font-size: 1.4rem; font-weight: 600; }
-    .hero-trust-badges {
-      position: absolute; bottom: 20px; left: 20px; right: 20px;
-      display: flex; gap: 8px; flex-wrap: wrap;
-    }
-    .trust-badge {
-      background: rgba(255,255,255,0.93); backdrop-filter: blur(8px);
-      border-radius: 50px; padding: 5px 13px;
-      font-size: 1.2rem; font-weight: 700; color: var(--green);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    /* ─── PAKET MENU ─── */
-    #paket { background: var(--white); }
-    .paket-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
-    .paket-card {
-      background: var(--white); border-radius: var(--radius-card);
-      box-shadow: var(--shadow-card); overflow: hidden; position: relative;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      border: 1.5px solid transparent;
-    }
-    .paket-card:hover { transform: translateY(-6px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-    .paket-card--popular { border-color: var(--green-accent); }
-    .paket-card--platinum { border-color: var(--gold); }
-    .paket-badge {
-      position: absolute; top: 14px; right: 14px;
-      padding: 4px 11px; border-radius: 50px;
-      font-size: 1.1rem; font-weight: 700;
-    }
-    .badge-popular { background: var(--green-accent); color: white; }
-    .badge-platinum { border: 1px solid var(--gold); color: var(--gold); }
-    .paket-img {
-      height: 150px; width: 100%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 4rem;
-    }
-    .paket-body { padding: 20px; }
-    .paket-tier { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 2px; }
-    .paket-name { font-size: 2.2rem; font-weight: 700; color: var(--green); line-height: 1.2; }
-    .paket-name--platinum { color: var(--gold); }
-    .paket-price { font-size: 2.6rem; font-weight: 700; color: var(--text); margin: 12px 0 2px; line-height: 1; }
-    .paket-price span { font-size: 1.4rem; font-weight: 400; color: var(--text-soft); }
-    .paket-min { font-size: 1.3rem; color: var(--text-soft); margin-bottom: 16px; }
-    .paket-list { list-style: none; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-    .paket-list li { font-size: 1.4rem; color: var(--text); display: flex; align-items: flex-start; gap: 7px; line-height: 1.4; }
-    .paket-list li::before { content: "✓"; color: var(--green-accent); font-weight: 700; flex-shrink: 0; }
-    .paket-pilihan { font-size: 1.3rem; color: var(--text-soft); font-style: italic; margin-bottom: 16px; line-height: 1.5; }
-    .paket-card .btn { width: 100%; justify-content: center; }
-
-    /* ─── MENU VARIANTS ─── */
-    #menu { background: var(--canvas); }
-    .menu-tabs { display: flex; gap: 8px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
-    .menu-tab {
-      padding: 8px 22px; border-radius: var(--radius-btn);
-      font-size: 1.4rem; font-weight: 600; border: 1.5px solid var(--green-accent);
-      background: transparent; color: var(--green-accent); cursor: pointer; transition: all 0.2s;
-    }
-    .menu-tab.active, .menu-tab:hover { background: var(--green-accent); color: white; }
-    .menu-tab:active { transform: scale(0.95); }
-    .menu-panel { display: none; }
-    .menu-panel.active { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-    .dish-card { background: var(--white); border-radius: var(--radius-card); box-shadow: var(--shadow-card); overflow: hidden; }
-    .dish-img-wrap { height: 175px; overflow: hidden; }
-    .dish-img {
-      width: 100%; height: 100%; object-fit: cover;
-      display: block; transition: transform 0.35s ease;
-    }
-    .dish-card:hover .dish-img { transform: scale(1.06); }
-    .dish-body { padding: 18px 20px; }
-    .dish-name { font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-    .dish-desc { font-size: 1.4rem; color: var(--text-soft); line-height: 1.55; }
-
-    /* ─── KAPASITAS ─── */
-    #kapasitas { background: var(--ceramic); }
-    .kapasitas-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-    .kapasitas-card {
-      background: var(--white); border-radius: var(--radius-card);
-      box-shadow: var(--shadow-card); padding: 40px 32px; text-align: center;
-    }
-    .kapasitas-icon { font-size: 3.2rem; margin-bottom: 12px; }
-    .kapasitas-title { font-size: 1.3rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 8px; }
-    .kapasitas-value { font-size: 2.8rem; font-weight: 700; color: var(--green); line-height: 1.2; margin-bottom: 6px; }
-    .kapasitas-note { font-size: 1.4rem; color: var(--text-soft); }
-
-    /* ─── WHY CHOOSE US — House Green feature band ─── */
-    #kenapa-kami { background: var(--green-house); padding: 64px 40px; }
-    #kenapa-kami .section-label { color: var(--green-light); }
-    #kenapa-kami .section-title { color: var(--on-dark); }
-    #kenapa-kami .section-sub { color: var(--on-dark-soft); }
-    .usp-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-    .usp-card {
-      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-      border-radius: var(--radius-card); padding: 28px;
-    }
-    .usp-icon { font-size: 2.8rem; margin-bottom: 12px; }
-    .usp-title { font-size: 1.7rem; font-weight: 700; color: var(--on-dark); margin-bottom: 8px; }
-    .usp-desc { font-size: 1.4rem; color: var(--on-dark-soft); line-height: 1.65; }
-
-    /* ─── PORTFOLIO ─── */
-    #portfolio { background: var(--canvas); }
-    .filter-chips { display: flex; gap: 8px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
-    .filter-chip {
-      padding: 6px 20px; border-radius: var(--radius-btn); font-size: 1.4rem; font-weight: 600;
-      border: 1.5px solid var(--green-accent); background: transparent; color: var(--green-accent);
-      cursor: pointer; transition: all 0.2s;
-    }
-    .filter-chip.active, .filter-chip:hover { background: var(--green-accent); color: white; }
-    .filter-chip:active { transform: scale(0.95); }
-    .portfolio-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-    .portfolio-item {
-      border-radius: var(--radius-card); overflow: hidden;
-      box-shadow: var(--shadow-card); position: relative;
-      aspect-ratio: 4/3; cursor: pointer;
-    }
-    .portfolio-img { width: 100%; height: 100%; transition: transform 0.35s ease; }
-    .portfolio-item:hover .portfolio-img { transform: scale(1.05); }
-    .portfolio-overlay {
-      position: absolute; inset: 0;
-      background: rgba(30,57,50,0.78);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      opacity: 0; transition: opacity 0.3s ease; padding: 20px; text-align: center;
-    }
-    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
-    .portfolio-title { font-size: 1.7rem; font-weight: 700; color: var(--on-dark); margin-bottom: 4px; }
-    .portfolio-meta { font-size: 1.3rem; color: var(--on-dark-soft); }
-
-    /* ─── TESTIMONIAL ─── */
-    #testimonial { background: var(--ceramic); }
-    .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-    .testi-card { background: var(--white); border-radius: var(--radius-card); box-shadow: var(--shadow-card); padding: 28px; }
-    .testi-stars { color: var(--green-accent); font-size: 1.6rem; letter-spacing: 2px; margin-bottom: 14px; }
-    .testi-quote { font-size: 1.5rem; color: var(--text); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
-    .testi-author { display: flex; align-items: center; gap: 12px; }
-    .testi-avatar {
-      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
-      background: var(--green-light); display: flex; align-items: center;
-      justify-content: center; font-size: 1.7rem; font-weight: 700; color: var(--green);
-    }
-    .testi-name { font-size: 1.4rem; font-weight: 700; color: var(--text); line-height: 1.3; }
-    .testi-role { font-size: 1.3rem; color: var(--text-soft); }
-
-    /* ─── CARA PESAN ─── */
-    #cara-pesan { background: var(--canvas); }
-    .steps-wrap { position: relative; }
-    .steps-line {
-      position: absolute; top: 28px; left: 12.5%; right: 12.5%;
-      height: 2px; background: var(--green-light); z-index: 0;
-    }
-    .steps-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; position: relative; z-index: 1; }
-    .step-item { text-align: center; }
-    .step-num {
-      width: 56px; height: 56px; border-radius: 50%; background: var(--green-accent);
-      color: white; font-size: 2rem; font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 20px; box-shadow: 0 4px 14px rgba(0,117,74,0.32);
-    }
-    .step-icon { font-size: 2rem; margin-bottom: 8px; }
-    .step-title { font-size: 1.7rem; font-weight: 700; color: var(--green); margin-bottom: 8px; }
-    .step-desc { font-size: 1.4rem; color: var(--text-soft); line-height: 1.6; }
-
-    /* ─── FORM / CTA BAND ─── */
-    #form { background: var(--green-house); padding: 80px 40px; }
-    .form-inner { max-width: 680px; margin: 0 auto; text-align: center; }
-    .form-band-label { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green-light); margin-bottom: 12px; }
-    .form-band-title {
-      font-family: var(--font-serif); font-size: 4rem; font-weight: 600;
-      color: var(--on-dark); line-height: 1.2; letter-spacing: -0.3px; margin-bottom: 12px;
-    }
-    .form-band-sub { font-size: 1.7rem; color: var(--on-dark-soft); margin-bottom: 40px; line-height: 1.65; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; text-align: left; }
-    .form-full { grid-column: 1 / -1; }
-    .form-field label {
-      display: block; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.06em;
-      text-transform: uppercase; color: var(--on-dark-soft); margin-bottom: 6px;
-    }
-    .form-field input, .form-field select, .form-field textarea {
-      width: 100%; padding: 12px 14px; border-radius: 8px;
-      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-      color: var(--on-dark); font-family: var(--font); font-size: 1.5rem;
-      transition: border-color 0.2s; outline: none; appearance: none;
-    }
-    .form-field input::placeholder, .form-field textarea::placeholder { color: rgba(255,255,255,0.35); }
-    .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
-      border-color: var(--green-light); background: rgba(255,255,255,0.14);
-    }
-    .form-field select option { color: var(--text); background: white; }
-    .form-field textarea { min-height: 96px; resize: vertical; }
-    .btn-submit { width: 100%; justify-content: center; padding: 14px 28px; font-size: 1.6rem; }
-
-    /* ─── FOOTER — House Green bookend ─── */
-    footer { background: var(--green-house); padding: 64px 40px 40px; }
-    .footer-top {
-      max-width: 1200px; margin: 0 auto;
-      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px;
-      padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    .footer-brand { font-size: 2rem; font-weight: 700; color: var(--on-dark); margin-bottom: 10px; }
-    .footer-tagline { font-size: 1.4rem; color: var(--on-dark-soft); font-style: italic; line-height: 1.6; margin-bottom: 20px; }
-    .cert-badges { display: flex; gap: 8px; flex-wrap: wrap; }
-    .cert-badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 4px 11px; border-radius: 50px;
-      border: 1px solid var(--gold); color: var(--gold);
-      font-size: 1.1rem; font-weight: 700; letter-spacing: 0.02em;
-    }
-    .footer-col-title {
-      font-size: 1.2rem; font-weight: 700; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--on-dark); margin-bottom: 20px;
-    }
-    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .footer-links a { font-size: 1.4rem; color: var(--on-dark-soft); text-decoration: none; transition: color 0.2s; }
-    .footer-links a:hover { color: var(--on-dark); }
-    .footer-bottom {
-      max-width: 1200px; margin: 0 auto; padding-top: 24px;
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
-    }
-    .footer-copy { font-size: 1.3rem; color: var(--on-dark-soft); }
-
-    /* ─── FLOATING WA BUTTON (Frap equiv.) ─── */
-    .frap {
-      position: fixed; bottom: 28px; right: 28px; z-index: 200;
-      width: 56px; height: 56px; border-radius: 50%;
-      background: var(--green-accent);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: var(--shadow-frap); text-decoration: none;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .frap:hover { transform: scale(1.08); }
-    .frap:active {
-      transform: scale(0.95);
-      box-shadow: 0 0 6px rgba(0,0,0,0.24), 0 8px 12px rgba(0,0,0,0);
-    }
-    .frap svg { width: 28px; height: 28px; fill: white; }
-
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 1024px) {
-      .paket-grid { grid-template-columns: repeat(2,1fr); }
-      .usp-grid { grid-template-columns: repeat(2,1fr); }
-      .footer-top { grid-template-columns: 1fr 1fr; gap: 36px; }
-    }
-    @media (max-width: 768px) {
-      .section { padding: 48px 20px; }
-      #hero { padding: 48px 20px; }
-      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
-      .hero-title { font-size: 3.8rem; }
-      .hero-visual { aspect-ratio: 16/9; }
-      .navbar { padding: 0 20px; }
-      .navbar-links { display: none; }
-      .paket-grid { grid-template-columns: 1fr; }
-      .menu-panel.active { grid-template-columns: 1fr; }
-      .kapasitas-grid { grid-template-columns: 1fr; }
-      .usp-grid { grid-template-columns: 1fr; }
-      .portfolio-grid { grid-template-columns: repeat(2,1fr); }
-      .testi-grid { grid-template-columns: 1fr; }
-      .steps-line { display: none; }
-      .steps-grid { grid-template-columns: repeat(2,1fr); gap: 32px; }
-      .form-grid { grid-template-columns: 1fr; }
-      .footer-top { grid-template-columns: 1fr; gap: 32px; }
-      .footer-bottom { flex-direction: column; align-items: flex-start; }
-      .form-band-title { font-size: 3rem; }
-      #kenapa-kami { padding: 48px 20px; }
-      #form { padding: 56px 20px; }
-      footer { padding: 48px 20px 32px; }
-    }
-    @media (max-width: 480px) {
-      .hero-title { font-size: 3.2rem; }
-      .portfolio-grid { grid-template-columns: 1fr; }
-      .steps-grid { grid-template-columns: 1fr; }
-      .hero-stats { gap: 24px; }
-    }
-  </style>
-</head>
-<body>
-
-<!-- ═══ NAVBAR ═══ -->
-<nav class="navbar">
-  <div class="navbar-inner">
-    <a href="/" class="navbar-logo">
-      <div class="logo-mark"><span>KB</span></div>
-      <span class="logo-text">Kotak Berkah</span>
-    </a>
-    <ul class="navbar-links">
-      <li><a href="#paket">Paket Menu</a></li>
-      <li><a href="#kapasitas">Layanan</a></li>
-      <li><a href="#portfolio">Portfolio</a></li>
-      <li><a href="#cara-pesan">Cara Pesan</a></li>
-      <li><a href="#form">Kontak</a></li>
-    </ul>
-    <a href="https://wa.me/6282268116531?text=Halo%20Kotak%20Berkah%2C%20saya%20ingin%20konsultasi%20catering" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding:8px 20px;font-size:1.4rem;">
-      Pesan via WhatsApp
-    </a>
-  </div>
-</nav>
-
-<!-- ═══ HERO — Cream canvas, Lora serif headline ═══ -->
-<section id="hero">
-  <div class="hero-inner">
-    <div>
-      <p class="hero-eyebrow">Catering Nasi Kotak Premium · Jabodetabek</p>
-      <h1 class="hero-title">Catering Yang Bikin Tamu Anda Pulang Dengan Senyuman.</h1>
-      <p class="hero-sub">Nasi kotak premium dengan cita rasa rumahan untuk pernikahan, acara kantor, dan syukuran. Sudah melayani 1.200+ event sejak 2019.</p>
-      <HeroStats client:load />
-      <div class="hero-actions">
-        <a href="#paket" class="btn btn-primary">Lihat Paket Menu</a>
-        <a href="https://wa.me/6282268116531?text=Halo%2C%20saya%20ingin%20konsultasi%20gratis" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Konsultasi Gratis</a>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <img
-        src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&h=1125&q=85"
-        alt="Nasi kotak premium tertata rapi dengan berbagai lauk pilihan"
-        fetchpriority="high"
-        loading="eager"
-        style="width:100%;height:100%;object-fit:cover;display:block;"
-      />
-      <div class="hero-trust-badges">
-        <span class="trust-badge">✓ Halal MUI</span>
-        <span class="trust-badge">✓ HACCP</span>
-        <span class="trust-badge">✓ On-Time</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ PAKET MENU — White cards on canvas ═══ -->
-<section id="paket" class="section">
-  <div class="container">
-    <div class="section-header">
-      <p class="section-label">Harga & Paket</p>
-      <h2 class="section-title">Paket Yang Pas, Untuk Setiap Anggaran</h2>
-      <p class="section-sub">Semua paket sudah termasuk kemasan eksklusif, sendok, tisu, dan air mineral.</p>
-    </div>
-    <div class="paket-grid">
-
-      <!-- Bronze -->
-      <div class="paket-card">
-        <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&h=400&q=80" alt="Paket Bronze nasi kotak" loading="lazy" style="width:100%;height:150px;object-fit:cover;display:block;" />
-        <div class="paket-body">
-          <p class="paket-tier">Paket</p>
-          <h3 class="paket-name">Bronze</h3>
-          <div class="paket-price">Rp 25.000 <span>/kotak</span></div>
-          <p class="paket-min">Minimum 50 box</p>
-          <ul class="paket-list">
-            <li>Nasi putih</li>
-            <li>1 protein utama</li>
-            <li>1 sayur & kerupuk</li>
-            <li>Buah + air mineral</li>
-          </ul>
-          <p class="paket-pilihan">Pilihan: ayam goreng, ayam bakar, semur daging</p>
-          <a href="https://wa.me/6282268116531?text=Halo%2C%20saya%20tertarik%20Paket%20Bronze" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Pilih Paket Ini</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f2efea" />
+    <title>Kotak Berkah Catering | Rasa Rumah untuk Acara Spesialmu</title>
+    <meta name="description" content="Pilihan nasi kotak dengan cita rasa rumahan untuk acara keluarga, kantor, dan pernikahan. Bandingkan paket mulai Rp25.000 dan konsultasikan acara melalui WhatsApp." />
+    <link rel="icon" href={asset('favicon.svg')} type="image/svg+xml" />
+    <meta property="og:title" content="Kotak Berkah | Rasa Rumah untuk Acara Spesialmu" />
+    <meta property="og:description" content="Temukan paket nasi kotak yang pas untuk acara Anda. Mulai Rp25.000 per kotak." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:image" content={new URL(asset(hero.src), Astro.site).href} />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Lewati ke konten</a>
+    <header class="site-header">
+      <a class="wordmark" href={base} aria-label="Kotak Berkah, halaman utama"><span class="brand-mark" aria-hidden="true">kb.</span><span>Kotak Berkah<span class="brand-sub">Catering</span></span></a>
+      <nav class="desktop-nav" aria-label="Navigasi utama"><a href="#paket">Paket Menu</a><a href="#kapasitas">Layanan</a><a href="#portfolio">Portfolio</a><a href="#cara-pesan">Cara Pesan</a></nav>
+      <div class="header-actions"><a class="button button-small" href="#form">Konsultasi acara</a><button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="mobile-navigation">Menu</button></div>
+      <nav id="mobile-navigation" class="mobile-nav" aria-label="Navigasi mobile" hidden><a href="#paket">Paket Menu</a><a href="#menu">Pilihan Menu</a><a href="#kapasitas">Layanan</a><a href="#portfolio">Portfolio</a><a href="#cara-pesan">Cara Pesan</a><a href="#form">Kontak</a></nav>
+    </header>
+    <main id="main">
+      <section id="hero" class="daylight-section" data-stage="menu" aria-labelledby="hero-title">
+        <div class="hero-intro"><h1 id="hero-title">Rasa rumah.<br /><em>Acara istimewa.</em></h1><p>Nasi kotak untuk pernikahan, acara kantor, dan syukuran. Pilih menu, ceritakan acara, biarkan kami membantu.</p><div class="hero-action"><a class="button button-sun" href="#paket">Lihat Paket Menu</a><a class="text-link" href={whatsapp} target="_blank" rel="noopener noreferrer">Konsultasi via WhatsApp</a></div></div>
+        <div class="hero-space">
+          <div class="sun-plane" aria-hidden="true"></div>
+          <figure class="hero-main-photo"><img id="stage-photo" src={asset(hero.src)} width={hero.width} height={hero.height} alt={hero.alt} fetchpriority="high" loading="eager" /><figcaption id="stage-caption">Rasa yang mengundang untuk berkumpul.</figcaption></figure>
+          <figure class="hero-side-photo"><img src={asset(heroSecondary.src)} width={heroSecondary.width} height={heroSecondary.height} alt={heroSecondary.alt} loading="eager" /><figcaption>Pilihan lauk</figcaption></figure>
+          <figure class="hero-detail-photo"><img src={asset(heroDetail.src)} width={heroDetail.width} height={heroDetail.height} alt={heroDetail.alt} loading="eager" /><figcaption>Detail rasa</figcaption></figure>
+          <div class="photo-note">Fotografi menu bersifat ilustratif.</div>
         </div>
-      </div>
+        <div class="section-path" role="group" aria-label="Jelajahi kebutuhan acara">{stages.map((stage) => <button type="button" data-light-stage data-stage={stage.id} data-photo-src={asset(stage.photo.src)} data-photo-alt={stage.photo.alt} data-photo-caption={stage.caption} aria-pressed={stage.id === 'menu'}><span class="path-line" aria-hidden="true"></span>{stage.label}</button>)}<div class="path-price"><span>Mulai <strong>Rp25.000</strong> / kotak</span><button type="button" class="text-link" data-select-package="Bronze">Pilih paket awal</button></div></div>
+      </section>
 
-      <!-- Silver — Terlaris -->
-      <div class="paket-card paket-card--popular">
-        <span class="paket-badge badge-popular">⭐ Terlaris</span>
-        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&h=400&q=80" alt="Paket Silver nasi kotak dengan rendang" loading="lazy" style="width:100%;height:150px;object-fit:cover;display:block;" />
-        <div class="paket-body">
-          <p class="paket-tier">Paket</p>
-          <h3 class="paket-name">Silver</h3>
-          <div class="paket-price">Rp 35.000 <span>/kotak</span></div>
-          <p class="paket-min">Minimum 50 box</p>
-          <ul class="paket-list">
-            <li>Nasi putih atau uduk</li>
-            <li>2 protein pilihan</li>
-            <li>1 sayur + dessert</li>
-            <li>Buah + air mineral</li>
-          </ul>
-          <p class="paket-pilihan">Rendang, ayam betutu, ikan dori, dan lainnya</p>
-          <a href="https://wa.me/6282268116531?text=Halo%2C%20saya%20tertarik%20Paket%20Silver" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Pilih Paket Ini</a>
-        </div>
-      </div>
+      <section id="paket" class="section packages-section" aria-labelledby="packages-title">
+        <div class="section-heading"><h2 id="packages-title">Ada paket yang pas<br /><em>untuk setiap meja.</em></h2><p>Empat pilihan untuk kebutuhan berbeda. Semua paket termasuk kemasan, sendok, tisu, dan air mineral.</p></div>
+        <div class="package-grid">{packages.map((pack, index) => <article class:list={['package', { 'package-featured': pack.name === 'Silver' }]}>
+          <div class="package-top"><h3>{pack.name}</h3><span>{pack.min} kotak minimum</span></div>
+          <figure><img src={asset(food[index].src)} width={food[index].width} height={food[index].height} alt={food[index].alt} loading="lazy" /><figcaption>Ilustrasi pilihan menu</figcaption></figure>
+          <div class="package-price">{money(pack.price)}<span>per kotak</span></div><p class="package-note">{pack.note}</p><ul>{pack.items.map((item) => <li>{item}</li>)}</ul><p class="package-choices">{pack.choices}</p><button class:list={['button', { 'button-sun': pack.name === 'Silver', 'button-outline': pack.name !== 'Silver' }]} type="button" data-select-package={pack.name}>Pilih {pack.name}</button>
+        </article>)}</div>
+        <p class="section-footnote">Foto bukan representasi pasti isi setiap paket. Rincian menu dan ongkos kirim dikonfirmasi saat konsultasi.</p>
+      </section>
 
-      <!-- Gold -->
-      <div class="paket-card">
-        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&h=400&q=80" alt="Paket Gold nasi kotak premium" loading="lazy" style="width:100%;height:150px;object-fit:cover;display:block;" />
-        <div class="paket-body">
-          <p class="paket-tier">Paket</p>
-          <h3 class="paket-name">Gold</h3>
-          <div class="paket-price">Rp 50.000 <span>/kotak</span></div>
-          <p class="paket-min">Minimum 50 box</p>
-          <ul class="paket-list">
-            <li>Nasi putih, uduk, atau kebuli</li>
-            <li>3 protein + 2 sayur + lalapan</li>
-            <li>Sambal + dessert premium</li>
-            <li>Buah + air mineral</li>
-          </ul>
-          <p class="paket-pilihan">Rendang sapi, gulai ayam, dendeng balado, ikan kakap</p>
-          <a href="https://wa.me/6282268116531?text=Halo%2C%20saya%20tertarik%20Paket%20Gold" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Pilih Paket Ini</a>
-        </div>
-      </div>
+      <section id="menu" class="section menu-section" aria-labelledby="menu-title">
+        <div class="section-heading"><h2 id="menu-title">Banyak rasa.<br /><em>Satu selera Anda.</em></h2><p>Dari lauk Nusantara sampai pilihan vegetarian. Jelajahi inspirasinya, lalu sampaikan menu favorit saat konsultasi.</p></div>
+        <div class="filter-row" role="group" aria-label="Kategori menu">{menuCategories.map((category) => <button type="button" data-menu-filter={category.value} aria-pressed={category.value === 'all'}>{category.label}</button>)}</div>
+        <div class="dish-grid">{food.map((photo, index) => <figure class:list={['dish', { 'dish-wide': index % 7 === 0 }]} data-dish data-category={photo.category}><img src={asset(photo.src)} width={photo.width} height={photo.height} alt={photo.alt} loading="lazy" decoding="async" /><figcaption><h3>{photoTitle(photo)}</h3><span>{menuCategories.find((category) => category.value === photo.category)?.label}</span></figcaption></figure>)}</div>
+        <div class="menu-close"><p>Belum menemukan yang cocok?</p><a class="text-link" href={whatsapp} target="_blank" rel="noopener noreferrer">Diskusikan menu custom dengan kami</a><small>Seluruh foto pada eksplorasi menu adalah ilustrasi.</small></div>
+      </section>
 
-      <!-- Platinum — Gold ceremony only -->
-      <div class="paket-card paket-card--platinum">
-        <span class="paket-badge badge-platinum">✦ Premium</span>
-        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=600&h=400&q=80" alt="Paket Platinum fine dining catering" loading="lazy" style="width:100%;height:150px;object-fit:cover;display:block;" />
-        <div class="paket-body">
-          <p class="paket-tier">Paket</p>
-          <h3 class="paket-name paket-name--platinum">Platinum</h3>
-          <div class="paket-price">Rp 75.000 <span>/kotak</span></div>
-          <p class="paket-min">Minimum 100 box</p>
-          <ul class="paket-list">
-            <li>Full premium course</li>
-            <li>Appetizer + 4 protein utama</li>
-            <li>Dessert + fresh fruit</li>
-            <li>Mineral water atau jus pilihan</li>
-          </ul>
-          <p class="paket-pilihan">Cocok untuk pernikahan & corporate executive event</p>
-          <a href="https://wa.me/6282268116531?text=Halo%2C%20saya%20tertarik%20Paket%20Platinum" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="border-color:var(--gold);color:var(--gold);">Pilih Paket Ini</a>
-        </div>
-      </div>
+      <section id="kenapa-kami" class="section ingredients-section" aria-labelledby="ingredients-title">
+        <div class="ingredient-intro"><h2 id="ingredients-title">Acara boleh besar.<br /><em>Rasanya tetap dekat.</em></h2><p>Rasa rumah, untuk acara spesialmu. Dari pilihan lauk sampai kebutuhan tamu, setiap detail dapat dibicarakan sebelum Anda menentukan pesanan.</p></div>
+        <div class="ingredient-strip">{ingredients.map((photo) => <figure><img src={asset(photo.src)} width={photo.width} height={photo.height} alt={photo.alt} loading="lazy" /><figcaption>{photo.alt}</figcaption></figure>)}</div>
+        <div class="principles"><p><strong>Menu yang bisa dibicarakan.</strong>Pilihan lauk, selera tamu, dan permintaan khusus disampaikan saat konsultasi.</p><p><strong>Isi paket yang jelas.</strong>Bandingkan protein, sayur, pelengkap, dan harga sebelum memilih.</p><p><strong>Acara Anda yang jadi acuan.</strong>Tanggal, jumlah kotak, lokasi, dan anggaran membantu menyiapkan penawaran.</p></div>
+      </section>
 
-    </div>
-  </div>
-</section>
+      <section id="kapasitas" class="section service-section" aria-labelledby="service-title">
+        <div class="service-copy"><h2 id="service-title">Dalam satu kotak,<br /><em>untuk banyak momen.</em></h2><p>Dari acara keluarga hingga kebutuhan kantor. Sampaikan jumlah tamu dan lokasi, kami bantu membicarakan paket yang sesuai.</p><dl class="service-facts"><div><dt>Minimum pesanan</dt><dd>50 kotak standar<br />100 kotak Platinum</dd></div><div><dt>Waktu booking</dt><dd>H-3 paket standar<br />H-7 paket Platinum</dd></div><div><dt>Area layanan</dt><dd>Jabodetabek & Bandung<br /><small>Rute dan ongkir dikonfirmasi admin.</small></dd></div></dl><a class="text-link" href="#form">Ceritakan kebutuhan acara Anda</a></div>
+        <div class="packaging-space">{packaging.map((photo) => <figure><img src={asset(photo.src)} width={photo.width} height={photo.height} alt={photo.alt} loading="lazy" /><figcaption>{photo.alt} · ilustrasi</figcaption></figure>)}<p class="packaging-caption">Pilihan kemasan aktual mengikuti paket dan hasil konsultasi.</p></div>
+      </section>
 
-<!-- ═══ MENU VARIANTS ═══ -->
-<section id="menu" class="section">
-  <div class="container">
-    <div class="section-header">
-      <p class="section-label">Pilihan Menu</p>
-      <h2 class="section-title">Pilih Menu Favorit Anda</h2>
-      <p class="section-sub">Belum ketemu yang cocok? Kami bisa custom menu sesuai request khusus Anda.</p>
-    </div>
-    <div class="menu-tabs">
-      <button class="menu-tab active" data-tab="nusantara">Nusantara</button>
-      <button class="menu-tab" data-tab="western">Western</button>
-      <button class="menu-tab" data-tab="asian">Asian Fusion</button>
-      <button class="menu-tab" data-tab="vegetarian">Vegetarian</button>
-    </div>
+      <section id="portfolio" class="section occasion-section" aria-labelledby="occasion-title">
+        <div class="section-heading"><h2 id="occasion-title">Ada cerita<br /><em>di setiap pertemuan.</em></h2><p>Inspirasi untuk pernikahan, rapat, seminar, dan kumpul keluarga. Foto berikut menggambarkan suasana acara, bukan dokumentasi klien Kotak Berkah.</p></div>
+        <div class="filter-row" role="group" aria-label="Jenis acara">{[{ value: 'all', label: 'Semua acara' }, { value: 'wedding', label: 'Wedding' }, { value: 'corporate', label: 'Corporate' }, { value: 'education', label: 'Pendidikan' }, { value: 'social', label: 'Keluarga & sosial' }].map((filter) => <button type="button" data-gallery-filter={filter.value} aria-pressed={filter.value === 'all'}>{filter.label}</button>)}</div>
+        <div class="occasion-grid">{occasions.map((photo, index) => <figure class:list={['occasion', { 'occasion-wide': index === 0 }]} data-gallery-item data-category={occasionCategory(photo)}><img src={asset(photo.src)} width={photo.width} height={photo.height} alt={photo.alt} loading="lazy" /><figcaption><h3>{occasionLabels[occasionCategory(photo)]}</h3><span>Inspirasi suasana acara</span></figcaption></figure>)}</div>
+      </section>
 
-    <div id="tab-nusantara" class="menu-panel active">
-      <div class="dish-card">
-        <div class="dish-img-wrap"><img src="https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=600&h=360&q=80" alt="Rendang sapi Padang" loading="lazy" class="dish-img" /></div>
-        <div class="dish-body"><h4 class="dish-name">Rendang Sapi Padang</h4><p class="dish-desc">Daging sapi pilihan dimasak lambat dengan rempah Minangkabau hingga meresap sempurna.</p></div>
-      </div>
-      <div class="dish-card">
-        <div class="dish-img-wrap"><img src="https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=600&h=360&q=80" alt="Ayam Betutu Bali" loading="lazy" class="dish-img" /></div>
-        <div class="dish-body"><h4 class="dish-name">Ayam Betutu Bali</h4><p class="dish-desc">Ayam kampung dibumbui base genep khas Bali, dipanggang perlahan hingga harum dan meresap.</p></div>
-      </div>
-      <div class="dish-card">
-        <div class="dish-img-wrap"><img src="https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=600&h=360&q=80" alt="Nasi Kebuli Kambing" loading="lazy" class="dish-img" /></div>
-        <div class="dish-body"><h4 class="dish-name">Nasi Kebuli Kambing</h4><p class="dish-desc">Nasi kebuli wangi dengan kambing muda dan rempah Timur Tengah, favorit acara pernikahan.</p></div>
-      </div>
-    </div>
+      <section id="testimonial" class="section gathering-note" aria-labelledby="gathering-title"><h2 id="gathering-title">Yang dirayakan bukan cuma acaranya.<br /><em>Tapi kebersamaannya.</em></h2><p>Untuk meja rapat yang penuh ide, keluarga yang kembali berkumpul, dan hari istimewa yang ingin dikenang.</p><a class="text-link" href="#form">Mari siapkan konsumsi acaranya</a></section>
 
-    <div id="tab-western" class="menu-panel">
-      <div class="dish-card">
-        <div class="dish-img-wrap"><img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=600&h=360&q=80" alt="Grilled Chicken Rice" loading="lazy" class="dish-img" /></div>
-        <div class="dish-body"><h4 class="dish-name">Grilled Chicken Rice</h4><p class="dish-desc">Dada ayam panggang herb butter, mixed vegetables, dan nasi steamed — pilihan corporate yang ringan.</p></div>
-      </div>
-      <div class="dish-card">
-        <div class="dish-img-wrap"><img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=600&h=360&q=80" alt="Beef Stroganoff" loading="lazy" class="dish-img" /></div>
-        <div class="dish-body"><h4 class="dish-name">Beef Stroganoff</h4><p class="dish-desc">Potongan daging sapi premium dalam saus krim mushroom, disajikan dengan buttered rice.</p></div>
-      </div>
-      <div class="dish-card">
-        <div class="dish-img-wrap"><img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&h=360&q=80" alt="Grilled Dory Lemon Butter" loading="lazy" class="dish-img" /></div>
-        <div class="dish-body"><h4 class="dish-name">Grilled Dory Lemon Butter</h4><p class="dish-desc">Fillet ikan dori segar dipanggang dengan lemon butter — ringan, elegan, cocok untuk seminar.</p></div>
-      </div>
-    </div>
+      <section id="cara-pesan" class="section steps-section" aria-labelledby="steps-title"><div class="section-heading"><h2 id="steps-title">Dari obrolan pertama,<br /><em>sampai hari acara.</em></h2><p>Empat langkah untuk menyamakan kebutuhan sebelum pesanan disiapkan.</p></div><ol class="order-steps"><li><span>1</span><h3>Konsultasi</h3><p>Sampaikan tanggal, lokasi, jumlah kotak, dan pilihan menu melalui WhatsApp.</p></li><li><span>2</span><h3>Penawaran</h3><p>Admin membantu merinci paket, menu, pengiriman, dan total biaya.</p></li><li><span>3</span><h3>Konfirmasi</h3><p>DP 30% sesuai penawaran untuk mengonfirmasi pesanan.</p></li><li><span>4</span><h3>Hari acara</h3><p>Pengiriman mengikuti jadwal dan lokasi yang telah disepakati.</p></li></ol></section>
 
-    <div id="tab-asian" class="menu-panel">
-      <div class="dish-card">
-        <div class="dish-img-wrap"><img src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?auto=format&fit=crop&w=600&h=360&q=80" alt="Ayam Teriyaki Jepang" loading="lazy" class="dish-img" /></div>
-        <div class="dish-body"><h4 class="dish-name">Ayam Teriyaki Jepang</h4><p class="dish-desc">Ayam fillet glazed saus teriyaki authentic, disajikan dengan steamed rice dan sesame salad.</p></div>
-      </div>
-      <div class="dish-card">
-        <div class="dish-img-wrap"><img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=600&h=360&q=80" alt="Nasi Hainan Ayam" loading="lazy" class="dish-img" /></div>
-        <div class="dish-body"><h4 class="dish-name">Nasi Hainan Ayam</h4><p class="dish-desc">Nasi harum dimasak kaldu ayam ala Hainan, lengkap dengan ayam poached dan sambal jahe.</p></div>
-      </div>
-      <div class="dish-card">
-        <div class="dish-img-wrap"><img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&h=360&q=80" alt="Tom Yum Seafood" loading="lazy" class="dish-img" /></div>
-        <div class="dish-body"><h4 class="dish-name">Tom Yum Seafood</h4><p class="dish-desc">Sup asam pedas khas Thailand dengan udang dan cumi segar, disajikan hangat bersama nasi jasmine.</p></div>
-      </div>
-    </div>
+      <section class="section faq-section" aria-labelledby="faq-title"><h2 id="faq-title">Sebelum Anda<br /><em>menentukan pilihan.</em></h2><div class="faq-list"><details><summary>Berapa minimum pemesanannya?</summary><p>Bronze, Silver, dan Gold mulai 50 kotak. Platinum mulai 100 kotak. Sampaikan jumlah yang Anda butuhkan saat konsultasi.</p></details><details><summary>Kapan sebaiknya melakukan booking?</summary><p>Siapkan pemesanan setidaknya H-3 untuk paket standar dan H-7 untuk Platinum. Ketersediaan tanggal tetap perlu dikonfirmasi admin.</p></details><details><summary>Apakah bisa memilih menu sendiri?</summary><p>Pilihan lauk dan menu custom dapat didiskusikan. Sertakan selera tamu, kebutuhan vegetarian, atau alergi pada catatan. Admin akan mengonfirmasi kemungkinan pemenuhannya.</p></details><details><summary>Apakah harga sudah termasuk ongkos kirim?</summary><p>Harga paket di halaman ini adalah harga makanan per kotak. Rute pengiriman, ongkir, dan ketentuan tambahan dikonfirmasi dalam penawaran.</p></details><details><summary>Apakah formulir ini langsung memesan?</summary><p>Tidak. Formulir membuka WhatsApp dengan ringkasan kebutuhan Anda. Pesanan baru dikonfirmasi setelah penawaran dan ketentuan pembayaran disepakati.</p></details></div></section>
 
-    <div id="tab-vegetarian" class="menu-panel">
-      <div class="dish-card">
-        <div class="dish-img-wrap"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&h=360&q=80" alt="Tumis Sayur Mix Rempah" loading="lazy" class="dish-img" /></div>
-        <div class="dish-body"><h4 class="dish-name">Tumis Sayur Mix Rempah</h4><p class="dish-desc">Brokoli, wortel, buncis segar ditumis dengan bawang putih dan rempah pilihan dapur kami.</p></div>
-      </div>
-      <div class="dish-card">
-        <div class="dish-img-wrap"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&h=360&q=80" alt="Tahu Tempe Balado" loading="lazy" class="dish-img" /></div>
-        <div class="dish-body"><h4 class="dish-name">Tahu Tempe Balado</h4><p class="dish-desc">Tahu dan tempe goreng renyah dengan balado merah pedas manis — kaya protein nabati.</p></div>
-      </div>
-      <div class="dish-card">
-        <div class="dish-img-wrap"><img src="https://images.unsplash.com/photo-1506084868230-bb9d95c24759?auto=format&fit=crop&w=600&h=360&q=80" alt="Jamur Crispy Saus Tiram" loading="lazy" class="dish-img" /></div>
-        <div class="dish-body"><h4 class="dish-name">Jamur Crispy Saus Tiram</h4><p class="dish-desc">Jamur tiram digoreng crispy dengan saus tiram sayuran — alternatif protein yang populer.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ KAPASITAS & LAYANAN ═══ -->
-<section id="kapasitas" class="section">
-  <div class="container">
-    <div class="section-header">
-      <p class="section-label">Jangkauan Layanan</p>
-      <h2 class="section-title">Skala Kecil Sampai Ribuan Tamu</h2>
-      <p class="section-sub">Dari syukuran keluarga 50 orang hingga wedding 3.000 tamu — kami siap melayani dengan standar yang sama.</p>
-    </div>
-    <div class="kapasitas-grid">
-      <div class="kapasitas-card">
-        <div class="kapasitas-icon">📦</div>
-        <div class="kapasitas-title">Min. Order</div>
-        <div class="kapasitas-value">50 Box</div>
-        <div class="kapasitas-note">Free delivery untuk area Jakarta</div>
-      </div>
-      <div class="kapasitas-card">
-        <div class="kapasitas-icon">🚚</div>
-        <div class="kapasitas-title">Area Layanan</div>
-        <div class="kapasitas-value">Jabodetabek</div>
-        <div class="kapasitas-note">Plus Bandung & Bogor</div>
-      </div>
-      <div class="kapasitas-card">
-        <div class="kapasitas-icon">📅</div>
-        <div class="kapasitas-title">Booking</div>
-        <div class="kapasitas-value">H-3 s/d H-7</div>
-        <div class="kapasitas-note">H-3 standar · H-7 untuk Platinum</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ WHY CHOOSE US — House Green feature band ═══ -->
-<section id="kenapa-kami">
-  <div class="container">
-    <div class="section-header">
-      <p class="section-label">Keunggulan Kami</p>
-      <h2 class="section-title">Kenapa Klien Percaya Kami?</h2>
-      <p class="section-sub">Lebih dari sekadar makanan — kami berkomitmen pada konsistensi dan ketenangan pikiran Anda di hari penting.</p>
-    </div>
-    <div class="usp-grid">
-      <div class="usp-card">
-        <div class="usp-icon">🏠</div>
-        <h3 class="usp-title">Dapur Sendiri, Bukan Outsource</h3>
-        <p class="usp-desc">Kontrol kualitas dari hulu sampai hilir. Setiap masakan dikerjakan tim dapur kami sendiri — tidak pernah di-subkontrakkan.</p>
-      </div>
-      <div class="usp-card">
-        <div class="usp-icon">✅</div>
-        <h3 class="usp-title">Halal MUI Tersertifikasi</h3>
-        <p class="usp-desc">Bahan dan proses masak bersertifikat Halal MUI. Aman dan nyaman untuk semua tamu undangan, apapun latar belakangnya.</p>
-      </div>
-      <div class="usp-card">
-        <div class="usp-icon">⏰</div>
-        <h3 class="usp-title">On-Time Guarantee</h3>
-        <p class="usp-desc">Terlambat lebih dari 30 menit? Kami refund 10% langsung. Ketepatan waktu bukan janji kosong — ada kompensasi nyata.</p>
-      </div>
-      <div class="usp-card">
-        <div class="usp-icon">🌡️</div>
-        <h3 class="usp-title">Food Safety HACCP</h3>
-        <p class="usp-desc">Bersertifikat HACCP. Suhu makanan terjaga sejak dapur hingga tersaji di meja tamu Anda — tidak ada kompromi soal keamanan pangan.</p>
-      </div>
-      <div class="usp-card">
-        <div class="usp-icon">🎁</div>
-        <h3 class="usp-title">Free Tasting</h3>
-        <p class="usp-desc">Untuk order 200+ box, kami siapkan sesi tasting gratis sebelum hari H. Pesan dengan keyakinan penuh, bukan sekadar percaya.</p>
-      </div>
-      <div class="usp-card">
-        <div class="usp-icon">👨‍🍳</div>
-        <h3 class="usp-title">Chef Berpengalaman 15+ Tahun</h3>
-        <p class="usp-desc">Tim chef kami pernah menangani event di istana negara. Kualitas yang sama kini bisa Anda hadirkan untuk acara Anda.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ PORTFOLIO EVENT ═══ -->
-<section id="portfolio" class="section">
-  <div class="container">
-    <div class="section-header">
-      <p class="section-label">Galeri Event</p>
-      <h2 class="section-title">Event Yang Pernah Kami Layani</h2>
-      <p class="section-sub">Dari syukuran keluarga hingga wedding 1.000 tamu — kepercayaan klien adalah portofolio terbaik kami.</p>
-    </div>
-    <div class="filter-chips">
-      <button class="filter-chip active" data-filter="all">Semua</button>
-      <button class="filter-chip" data-filter="wedding">Wedding</button>
-      <button class="filter-chip" data-filter="corporate">Corporate</button>
-      <button class="filter-chip" data-filter="government">Pemerintahan</button>
-      <button class="filter-chip" data-filter="education">Pendidikan</button>
-      <button class="filter-chip" data-filter="social">Sosial</button>
-    </div>
-    <div class="portfolio-grid">
-      <div class="portfolio-item" data-category="wedding">
-        <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&h=600&q=80" alt="Wedding Sarah & Dimas" loading="lazy" class="portfolio-img" />
-        <div class="portfolio-overlay">
-          <div class="portfolio-title">Wedding Sarah & Dimas</div>
-          <div class="portfolio-meta">800 box · Jakarta · 2024</div>
-        </div>
-      </div>
-      <div class="portfolio-item" data-category="corporate">
-        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&h=600&q=80" alt="Annual Meeting PT XYZ" loading="lazy" class="portfolio-img" />
-        <div class="portfolio-overlay">
-          <div class="portfolio-title">Annual Meeting PT XYZ</div>
-          <div class="portfolio-meta">350 box · Sudirman · 2024</div>
-        </div>
-      </div>
-      <div class="portfolio-item" data-category="government">
-        <img src="https://images.unsplash.com/photo-1573167243872-43c6433b9d40?auto=format&fit=crop&w=800&h=600&q=80" alt="Rakornas Kementerian" loading="lazy" class="portfolio-img" />
-        <div class="portfolio-overlay">
-          <div class="portfolio-title">Rakornas Kementerian</div>
-          <div class="portfolio-meta">1.200 box · Jakarta · 2023</div>
-        </div>
-      </div>
-      <div class="portfolio-item" data-category="education">
-        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&h=600&q=80" alt="Wisuda Universitas Indonesia" loading="lazy" class="portfolio-img" />
-        <div class="portfolio-overlay">
-          <div class="portfolio-title">Wisuda Universitas Indonesia</div>
-          <div class="portfolio-meta">600 box · Depok · 2024</div>
-        </div>
-      </div>
-      <div class="portfolio-item" data-category="social">
-        <img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?auto=format&fit=crop&w=800&h=600&q=80" alt="Acara Syukuran Keluarga" loading="lazy" class="portfolio-img" />
-        <div class="portfolio-overlay">
-          <div class="portfolio-title">Acara Syukuran Keluarga</div>
-          <div class="portfolio-meta">200 box · Bekasi · 2024</div>
-        </div>
-      </div>
-      <div class="portfolio-item" data-category="wedding">
-        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&h=600&q=80" alt="Wedding Rina & Bagas" loading="lazy" class="portfolio-img" />
-        <div class="portfolio-overlay">
-          <div class="portfolio-title">Wedding Rina & Bagas</div>
-          <div class="portfolio-meta">1.000 box · Tangerang · 2023</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ TESTIMONIAL ═══ -->
-<section id="testimonial" class="section">
-  <div class="container">
-    <div class="section-header">
-      <p class="section-label">Kata Klien</p>
-      <h2 class="section-title">Cerita Dari Klien Kami</h2>
-      <p class="section-sub">Kepercayaan mereka adalah alasan kami terus berkomitmen pada kualitas terbaik di setiap kotak.</p>
-    </div>
-    <TestimonialCarousel client:visible />
-  </div>
-</section>
-
-<!-- ═══ CARA PESAN ═══ -->
-<section id="cara-pesan" class="section">
-  <div class="container">
-    <div class="section-header">
-      <p class="section-label">Alur Pemesanan</p>
-      <h2 class="section-title">Cuma 4 Langkah, Pesanan Siap</h2>
-      <p class="section-sub">Dari konsultasi hingga pengiriman — proses yang sederhana, transparan, dan tanpa kejutan.</p>
-    </div>
-    <div class="steps-wrap">
-      <div class="steps-line"></div>
-      <div class="steps-grid">
-        <div class="step-item">
-          <div class="step-num">1</div>
-          <div class="step-icon">💬</div>
-          <h3 class="step-title">Konsultasi</h3>
-          <p class="step-desc">Hubungi via WA, sampaikan tanggal acara, lokasi, dan estimasi jumlah tamu Anda.</p>
-        </div>
-        <div class="step-item">
-          <div class="step-num">2</div>
-          <div class="step-icon">📋</div>
-          <h3 class="step-title">Quotation</h3>
-          <p class="step-desc">Kami kirim penawaran detail dan menu recommendation dalam waktu 2 jam kerja.</p>
-        </div>
-        <div class="step-item">
-          <div class="step-num">3</div>
-          <div class="step-icon">💳</div>
-          <h3 class="step-title">Down Payment</h3>
-          <p class="step-desc">DP 30% untuk lock booking tanggal Anda. Sisanya lunas H-1 sebelum acara.</p>
-        </div>
-        <div class="step-item">
-          <div class="step-num">4</div>
-          <div class="step-icon">🚚</div>
-          <h3 class="step-title">Hari H</h3>
-          <p class="step-desc">Kami antar tepat waktu, dikemas rapi, dan siap saji untuk tamu istimewa Anda.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ FORM / CTA — House Green band ═══ -->
-<section id="form">
-  <div class="container">
-    <div class="form-inner">
-      <p class="form-band-label">Hubungi Kami</p>
-      <h2 class="form-band-title">Konsultasi Gratis Sekarang</h2>
-      <p class="form-band-sub">Ceritakan acara Anda — kami siapkan penawaran terbaik dalam 2 jam.</p>
-      <form onsubmit="submitForm(event)">
-        <div class="form-grid">
-          <div class="form-field"><label>Nama Lengkap</label><input type="text" placeholder="Nama Anda" required /></div>
-          <div class="form-field"><label>No. WhatsApp</label><input type="tel" placeholder="08xx-xxxx-xxxx" required /></div>
-          <div class="form-field"><label>Tanggal Acara</label><input type="date" required /></div>
-          <div class="form-field"><label>Jumlah Box</label><input type="number" placeholder="Contoh: 200" min="50" required /></div>
-          <div class="form-field"><label>Pilih Paket</label>
-            <select>
-              <option value="">-- Pilih Paket --</option>
-              <option>Bronze — Rp 25.000/kotak</option>
-              <option>Silver — Rp 35.000/kotak</option>
-              <option>Gold — Rp 50.000/kotak</option>
-              <option>Platinum — Rp 75.000/kotak</option>
-              <option>Belum tahu, butuh saran</option>
-            </select>
-          </div>
-          <div class="form-field"><label>Lokasi Acara</label><input type="text" placeholder="Kota / Area acara" /></div>
-          <div class="form-field form-full"><label>Catatan Tambahan</label>
-            <textarea placeholder="Tema acara, permintaan khusus, alergi, atau informasi lainnya..."></textarea>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-on-dark btn-submit">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--green-accent)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.556 4.12 1.528 5.856L0 24l6.335-1.652A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.372l-.36-.213-3.76.98 1.006-3.657-.234-.376A9.818 9.818 0 1112 21.818z"/></svg>
-          Kirim via WhatsApp
-        </button>
-      </form>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ FOOTER — House Green bookend ═══ -->
-<footer>
-  <div class="footer-top">
-    <div>
-      <div class="footer-brand">Kotak Berkah Catering</div>
-      <p class="footer-tagline">"Setiap kotak adalah komitmen kami."</p>
-      <div class="cert-badges">
-        <span class="cert-badge">✦ Halal MUI</span>
-        <span class="cert-badge">✦ HACCP</span>
-        <span class="cert-badge">✦ NIB</span>
-      </div>
-    </div>
-    <div>
-      <div class="footer-col-title">Paket Menu</div>
-      <ul class="footer-links">
-        <li><a href="#paket">Paket Bronze</a></li>
-        <li><a href="#paket">Paket Silver</a></li>
-        <li><a href="#paket">Paket Gold</a></li>
-        <li><a href="#paket">Paket Platinum</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-col-title">Layanan</div>
-      <ul class="footer-links">
-        <li><a href="#kapasitas">Area Jabodetabek</a></li>
-        <li><a href="#kapasitas">Bandung & Bogor</a></li>
-        <li><a href="#cara-pesan">Cara Pesan</a></li>
-        <li><a href="#form">Konsultasi Gratis</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-col-title">Kontak</div>
-      <ul class="footer-links">
-        <li><a href="https://wa.me/6282268116531" target="_blank" rel="noopener noreferrer">WhatsApp Admin</a></li>
-        <li><a href="tel:+6282268116531">+62 812-3456-7890</a></li>
-        <li><a href="mailto:hello@kotakberkah.id">hello@kotakberkah.id</a></li>
-        <li><a href="#portfolio">Lihat Portfolio</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span class="footer-copy">© 2025 Kotak Berkah Catering. Semua hak dilindungi.</span>
-    <span class="footer-copy">Melayani Jabodetabek · Bandung · Bogor</span>
-  </div>
-</footer>
-
-<!-- ═══ FLOATING WA BUTTON — Frap equivalent ═══ -->
-<a href="https://wa.me/6282268116531?text=Halo%20Kotak%20Berkah%2C%20saya%20ingin%20konsultasi%20catering" target="_blank" rel="noopener noreferrer" class="frap" title="Hubungi via WhatsApp" aria-label="Chat WhatsApp">
-  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.556 4.12 1.528 5.856L0 24l6.335-1.652A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.372l-.36-.213-3.76.98 1.006-3.657-.234-.376A9.818 9.818 0 1112 21.818z"/></svg>
-</a>
-
-<script>
-  // Menu tab switching
-  document.querySelectorAll('.menu-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-    });
-  });
-
-  // Portfolio filter
-  document.querySelectorAll('.filter-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      const filter = chip.dataset.filter;
-      document.querySelectorAll('.portfolio-item').forEach(item => {
-        item.style.display = (filter === 'all' || item.dataset.category === filter) ? '' : 'none';
-      });
-    });
-  });
-
-  // Form → WhatsApp deep link
-  function submitForm(e) {
-    e.preventDefault();
-    const f = e.target;
-    const fields = f.querySelectorAll('input, select, textarea');
-    const nama    = fields[0].value;
-    const wa      = fields[1].value;
-    const tanggal = fields[2].value;
-    const jumlah  = fields[3].value;
-    const paket   = fields[4].value;
-    const lokasi  = fields[5].value;
-    const catatan = fields[6].value;
-    const msg = encodeURIComponent(
-      `Halo Kotak Berkah! 👋\n\nSaya ingin konsultasi catering:\n` +
-      `• Nama: ${nama}\n• No. WA: ${wa}\n• Tanggal: ${tanggal}\n` +
-      `• Jumlah: ${jumlah} box\n• Paket: ${paket}\n• Lokasi: ${lokasi}` +
-      (catatan ? `\n• Catatan: ${catatan}` : '')
-    );
-    window.open(`https://wa.me/6282268116531?text=${msg}`, '_blank');
-  }
-</script>
-
-</body>
+      <section id="form" class="section inquiry-section" aria-labelledby="inquiry-title"><div class="inquiry-intro"><h2 id="inquiry-title">Acara Anda<br /><em>dimulai dari sini.</em></h2><p>Ceritakan kebutuhannya. Kami bantu menemukan paket yang pas.</p><div class="estimate-box"><span>Estimasi biaya makanan</span><strong data-estimate>Rp1.750.000</strong><p data-minimum>Minimum 50 kotak</p><small>Belum termasuk ongkos kirim. Bukan penawaran final atau konfirmasi booking.</small></div><a class="text-link" href={whatsapp} target="_blank" rel="noopener noreferrer">Lebih nyaman ngobrol langsung?</a></div>
+        <form id="inquiry" class="inquiry-form" action="https://wa.me/6282268116531" method="get" target="_blank"><div class="form-fields"><div class="field"><label for="nama">Nama lengkap</label><input id="nama" name="nama" type="text" autocomplete="name" placeholder="Nama Anda" required /></div><div class="field"><label for="whatsapp">Nomor WhatsApp</label><input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel" placeholder="08xx atau +62" required /></div><div class="field"><label for="tanggal">Tanggal acara</label><input id="tanggal" name="tanggal" type="date" required /></div><div class="field"><label for="jumlah">Jumlah kotak</label><input id="jumlah" name="jumlah" type="number" min="50" step="1" value="50" inputmode="numeric" required /></div><div class="field"><label for="paket-choice">Pilihan paket</label><select id="paket-choice" name="paket" required>{packages.map((pack) => <option value={pack.name} selected={pack.name === 'Silver'}>{pack.name} · {money(pack.price)} / kotak</option>)}<option value="unknown">Belum tahu, butuh saran</option></select></div><div class="field"><label for="lokasi">Lokasi acara</label><input id="lokasi" name="lokasi" type="text" autocomplete="address-level2" placeholder="Kota atau area acara" required /></div><div class="field field-wide"><label for="catatan">Catatan tambahan <span>(opsional)</span></label><textarea id="catatan" name="catatan" rows="3" placeholder="Pilihan menu, alergi, atau kebutuhan khusus"></textarea></div></div><button class="button button-sun submit-button" type="submit">Lanjutkan ke WhatsApp</button><p class="form-disclaimer">Ringkasan kebutuhan dibuka di WhatsApp. Tidak ada pembayaran atau booking otomatis.</p><p class="form-status" data-form-status role="status" aria-live="polite"></p><noscript><p>Aktifkan JavaScript untuk mengirim ringkasan formulir, atau <a href={whatsapp}>hubungi admin langsung melalui WhatsApp</a>.</p></noscript></form>
+      </section>
+    </main>
+    <footer class="site-footer"><div class="footer-main"><a class="wordmark" href={base}><span class="brand-mark" aria-hidden="true">kb.</span><span>Kotak Berkah<span class="brand-sub">Catering</span></span></a><p>Rasa Rumah,<br />Untuk Acara Spesialmu.</p><div><a href="https://wa.me/6282268116531" target="_blank" rel="noopener noreferrer">WhatsApp admin</a><a href="tel:+6282268116531">+62 822-6811-6531</a><a href="mailto:hello@kotakberkah.id">hello@kotakberkah.id</a></div><div><a href="#paket">Paket Menu</a><a href="#portfolio">Inspirasi acara</a><a href="#form">Konsultasi Gratis</a></div></div><div class="footer-bottom"><span>© {new Date().getFullYear()} Kotak Berkah Catering</span><span>Jabodetabek & Bandung</span></div><details class="photo-credits"><summary>Tentang foto di halaman ini</summary><p>Foto stok digunakan sebagai ilustrasi makanan, kemasan, bahan, dan suasana acara. Bukan dokumentasi produk atau pelanggan Kotak Berkah.</p><ul>{photos.map((photo) => <li><a href={photo.source} target="_blank" rel="noopener noreferrer">{photo.alt}</a> · {photo.credit}</li>)}</ul></details></footer>
+    <a class="mobile-order" href="#form"><span>Siapkan acara Anda</span><strong>Konsultasi catering</strong></a>
+    <script>import '../scripts/landing';</script>
+  </body>
 </html>
