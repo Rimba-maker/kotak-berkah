@@ -1,0 +1,311 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-12T03:12:34.005644+00:00",
+  "title": "Design System: Kotak Berkah",
+  "extensions": {
+    "colorMeta": {
+      "limewash": {
+        "role": "neutral",
+        "displayName": "Limewash",
+        "canonical": "#f2efea",
+        "tonalRamp": [
+          "oklch(15% 0.0074 80.72)",
+          "oklch(26% 0.0074 80.72)",
+          "oklch(37% 0.0074 80.72)",
+          "oklch(48% 0.0074 80.72)",
+          "oklch(59% 0.0074 80.72)",
+          "oklch(70% 0.0074 80.72)",
+          "oklch(82% 0.0074 80.72)",
+          "oklch(95% 0.0074 80.72)"
+        ]
+      },
+      "charcoal": {
+        "role": "primary",
+        "displayName": "Charcoal",
+        "canonical": "#1c1f22",
+        "tonalRamp": [
+          "oklch(15% 0.0073 248.14)",
+          "oklch(26% 0.0073 248.14)",
+          "oklch(37% 0.0073 248.14)",
+          "oklch(48% 0.0073 248.14)",
+          "oklch(59% 0.0073 248.14)",
+          "oklch(70% 0.0073 248.14)",
+          "oklch(82% 0.0073 248.14)",
+          "oklch(95% 0.0073 248.14)"
+        ]
+      },
+      "sunbeam": {
+        "role": "primary",
+        "displayName": "Sunbeam",
+        "canonical": "#d6a43a",
+        "tonalRamp": [
+          "oklch(15% 0.1326 82.46)",
+          "oklch(26% 0.1326 82.46)",
+          "oklch(37% 0.1326 82.46)",
+          "oklch(48% 0.1326 82.46)",
+          "oklch(59% 0.1326 82.46)",
+          "oklch(70% 0.1326 82.46)",
+          "oklch(82% 0.1326 82.46)",
+          "oklch(95% 0.1326 82.46)"
+        ]
+      },
+      "shadow-blue": {
+        "role": "secondary",
+        "displayName": "Shadow Blue",
+        "canonical": "#5b6b7c",
+        "tonalRamp": [
+          "oklch(15% 0.0332 250.05)",
+          "oklch(26% 0.0332 250.05)",
+          "oklch(37% 0.0332 250.05)",
+          "oklch(48% 0.0332 250.05)",
+          "oklch(59% 0.0332 250.05)",
+          "oklch(70% 0.0332 250.05)",
+          "oklch(82% 0.0332 250.05)",
+          "oklch(95% 0.0332 250.05)"
+        ]
+      },
+      "stone": {
+        "role": "neutral",
+        "displayName": "Stone",
+        "canonical": "#d9dcd9",
+        "tonalRamp": [
+          "oklch(15% 0.0052 145.53)",
+          "oklch(26% 0.0052 145.53)",
+          "oklch(37% 0.0052 145.53)",
+          "oklch(48% 0.0052 145.53)",
+          "oklch(59% 0.0052 145.53)",
+          "oklch(70% 0.0052 145.53)",
+          "oklch(82% 0.0052 145.53)",
+          "oklch(95% 0.0052 145.53)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#fbfaf6",
+        "tonalRamp": [
+          "oklch(15% 0.0054 95.10)",
+          "oklch(26% 0.0054 95.10)",
+          "oklch(37% 0.0054 95.10)",
+          "oklch(48% 0.0054 95.10)",
+          "oklch(59% 0.0054 95.10)",
+          "oklch(70% 0.0054 95.10)",
+          "oklch(82% 0.0054 95.10)",
+          "oklch(95% 0.0054 95.10)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "#52615e",
+        "tonalRamp": [
+          "oklch(15% 0.0190 182.06)",
+          "oklch(26% 0.0190 182.06)",
+          "oklch(37% 0.0190 182.06)",
+          "oklch(48% 0.0190 182.06)",
+          "oklch(59% 0.0190 182.06)",
+          "oklch(70% 0.0190 182.06)",
+          "oklch(82% 0.0190 182.06)",
+          "oklch(95% 0.0190 182.06)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "canonical": "#b9bfba",
+        "tonalRamp": [
+          "oklch(15% 0.0096 150.66)",
+          "oklch(26% 0.0096 150.66)",
+          "oklch(37% 0.0096 150.66)",
+          "oklch(48% 0.0096 150.66)",
+          "oklch(59% 0.0096 150.66)",
+          "oklch(70% 0.0096 150.66)",
+          "oklch(82% 0.0096 150.66)",
+          "oklch(95% 0.0096 150.66)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Condensed invitation",
+        "purpose": "Self-hosted 600 italic; final mobile hero is 60px."
+      },
+      "headline": {
+        "displayName": "Section invitation",
+        "purpose": "Self-hosted 600 italic; mobile 54px, local gathering exception 47px."
+      },
+      "title": {
+        "displayName": "Operational title",
+        "purpose": "Normal Barlow 500."
+      },
+      "body": {
+        "displayName": "Reading text",
+        "purpose": "Normal Barlow 400; default paragraph max-width 68ch."
+      },
+      "label": {
+        "displayName": "Sentence-case label",
+        "purpose": "Normal Barlow 500 for navigation and fields."
+      }
+    },
+    "shadows": [
+      {
+        "name": "mobile-navigation-overlay",
+        "value": "0 12px 24px #1c1f2214",
+        "purpose": "Only the open mobile dropdown, not package cards."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(.16,1,.3,1)",
+        "purpose": "Root light-plane easing."
+      },
+      {
+        "name": "control-transition",
+        "value": "0.2s",
+        "purpose": "Button background/color/transform and filter background."
+      },
+      {
+        "name": "light-plane-transition",
+        "value": "0.8s",
+        "purpose": "Stage-driven top and rotation changes."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation: none; transition: none; scroll-behavior: auto; transform: rotate(-10deg)",
+        "purpose": "Static light plane and no animation under reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-desktop-max",
+        "value": "1150px"
+      },
+      {
+        "name": "tablet-max",
+        "value": "900px"
+      },
+      {
+        "name": "mobile-max",
+        "value": "600px"
+      },
+      {
+        "name": "wide-min",
+        "value": "1600px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary button",
+      "kind": "button",
+      "description": "Near-square action with hover, focus, and pressed feedback.",
+      "html": "<button class=\"ds-primary\" type=\"button\">Konsultasi acara</button>",
+      "css": "@font-face{font-family:Barlow;src:url('/fonts/barlow-400.ttf');font-weight:400}@font-face{font-family:Barlow;src:url('/fonts/barlow-500.ttf');font-weight:500}@font-face{font-family:Barlow;src:url('/fonts/barlow-600.ttf');font-weight:600}@font-face{font-family:'Barlow Condensed';src:url('/fonts/barlow-condensed-600-italic.ttf');font-weight:600;font-style:italic}.ds-primary{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:13px 24px;border:1px solid var(--charcoal,#1c1f22);border-radius:var(--radius,2px);background:var(--charcoal,#1c1f22);color:var(--paper,#fbfaf6);font:600 15px/1.2 Barlow,Arial,sans-serif;cursor:pointer;transition:background .2s,color .2s,transform .2s}.ds-primary:hover{background:var(--shadow-blue,#5b6b7c);border-color:var(--shadow-blue,#5b6b7c);color:var(--paper,#fbfaf6)}.ds-primary:focus-visible{outline:2px solid var(--charcoal,#1c1f22);outline-offset:5px}.ds-primary:active{transform:translateY(1px)}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}",
+      "refersTo": "button-primary"
+    },
+    {
+      "name": "Sunbeam button",
+      "kind": "button",
+      "description": "Near-square action with hover, focus, and pressed feedback.",
+      "html": "<button class=\"ds-sun\" type=\"button\">Lihat Paket Menu</button>",
+      "css": "@font-face{font-family:Barlow;src:url('/fonts/barlow-400.ttf');font-weight:400}@font-face{font-family:Barlow;src:url('/fonts/barlow-500.ttf');font-weight:500}@font-face{font-family:Barlow;src:url('/fonts/barlow-600.ttf');font-weight:600}@font-face{font-family:'Barlow Condensed';src:url('/fonts/barlow-condensed-600-italic.ttf');font-weight:600;font-style:italic}.ds-sun{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:13px 24px;border:1px solid var(--sunbeam,#d6a43a);border-radius:var(--radius,2px);background:var(--sunbeam,#d6a43a);color:var(--charcoal,#1c1f22);font:600 15px/1.2 Barlow,Arial,sans-serif;cursor:pointer;transition:background .2s,color .2s,transform .2s}.ds-sun:hover{background:#e5b64d;border-color:#e5b64d;color:var(--charcoal,#1c1f22)}.ds-sun:focus-visible{outline:2px solid var(--charcoal,#1c1f22);outline-offset:5px}.ds-sun:active{transform:translateY(1px)}@media(prefers-reduced-motion:reduce){.ds-sun{transition:none}}",
+      "refersTo": "button-sun"
+    },
+    {
+      "name": "Outline button",
+      "kind": "button",
+      "description": "Near-square action with hover, focus, and pressed feedback.",
+      "html": "<button class=\"ds-outline\" type=\"button\">Pilih Bronze</button>",
+      "css": "@font-face{font-family:Barlow;src:url('/fonts/barlow-400.ttf');font-weight:400}@font-face{font-family:Barlow;src:url('/fonts/barlow-500.ttf');font-weight:500}@font-face{font-family:Barlow;src:url('/fonts/barlow-600.ttf');font-weight:600}@font-face{font-family:'Barlow Condensed';src:url('/fonts/barlow-condensed-600-italic.ttf');font-weight:600;font-style:italic}.ds-outline{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:13px 24px;border:1px solid var(--charcoal,#1c1f22);border-radius:var(--radius,2px);background:transparent;color:var(--charcoal,#1c1f22);font:600 15px/1.2 Barlow,Arial,sans-serif;cursor:pointer;transition:background .2s,color .2s,transform .2s}.ds-outline:hover{background:var(--charcoal,#1c1f22);border-color:var(--charcoal,#1c1f22);color:var(--paper,#fbfaf6)}.ds-outline:focus-visible{outline:2px solid var(--charcoal,#1c1f22);outline-offset:5px}.ds-outline:active{transform:translateY(1px)}@media(prefers-reduced-motion:reduce){.ds-outline{transition:none}}",
+      "refersTo": "button-outline"
+    },
+    {
+      "name": "Inquiry field",
+      "kind": "input",
+      "description": "Labeled paper field with visible keyboard focus.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-label\" for=\"ds-location\">Kota / lokasi acara</label><input class=\"ds-input\" id=\"ds-location\" placeholder=\"Contoh: Jakarta Selatan\"></div>",
+      "css": "@font-face{font-family:Barlow;src:url('/fonts/barlow-400.ttf');font-weight:400}@font-face{font-family:Barlow;src:url('/fonts/barlow-500.ttf');font-weight:500}@font-face{font-family:Barlow;src:url('/fonts/barlow-600.ttf');font-weight:600}@font-face{font-family:'Barlow Condensed';src:url('/fonts/barlow-condensed-600-italic.ttf');font-weight:600;font-style:italic}.ds-field{font:400 15px/1.55 Barlow,Arial,sans-serif;color:var(--charcoal,#1c1f22)}.ds-label{display:block;font-size:14px;font-weight:500;margin-bottom:9px}.ds-input{width:100%;min-height:50px;padding:12px 14px;background:var(--paper,#fbfaf6);border:1px solid #959f98;border-radius:var(--radius,2px);color:var(--charcoal,#1c1f22);font:inherit}.ds-input::placeholder{color:#61706a}.ds-input:focus-visible{outline:2px solid var(--charcoal,#1c1f22);outline-offset:2px}",
+      "refersTo": "input"
+    },
+    {
+      "name": "Category filter",
+      "kind": "chip",
+      "description": "Selected and resting filter states; application supplies filtering.",
+      "html": "<div class=\"ds-filters\" role=\"group\" aria-label=\"Kategori menu\"><button class=\"ds-filter\" aria-pressed=\"true\" type=\"button\">Semua menu</button><button class=\"ds-filter\" aria-pressed=\"false\" type=\"button\">Nusantara</button></div>",
+      "css": "@font-face{font-family:Barlow;src:url('/fonts/barlow-400.ttf');font-weight:400}@font-face{font-family:Barlow;src:url('/fonts/barlow-500.ttf');font-weight:500}@font-face{font-family:Barlow;src:url('/fonts/barlow-600.ttf');font-weight:600}@font-face{font-family:'Barlow Condensed';src:url('/fonts/barlow-condensed-600-italic.ttf');font-weight:600;font-style:italic}.ds-filters{display:flex;flex-wrap:wrap;gap:8px}.ds-filter{padding:12px 20px;min-height:45px;border:1px solid var(--line,#b9bfba);background:transparent;color:var(--charcoal,#1c1f22);font:400 14px/1.55 Barlow,Arial,sans-serif;border-radius:var(--radius,2px);cursor:pointer;transition:background .2s}.ds-filter:hover{border-color:var(--charcoal,#1c1f22)}.ds-filter[aria-pressed=true]{background:var(--charcoal,#1c1f22);color:var(--paper,#fbfaf6);border-color:var(--charcoal,#1c1f22)}.ds-filter:focus-visible{outline:2px solid var(--charcoal,#1c1f22);outline-offset:5px}@media(prefers-reduced-motion:reduce){.ds-filter{transition:none}}",
+      "refersTo": "filter-selected"
+    },
+    {
+      "name": "Desktop navigation",
+      "kind": "nav",
+      "description": "Sentence-case links with quiet underline feedback.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Navigasi utama\"><a class=\"ds-nav-link\" href=\"#paket\">Paket Menu</a><a class=\"ds-nav-link\" href=\"#kapasitas\">Layanan</a><a class=\"ds-nav-link\" href=\"#cara-pesan\">Cara Pesan</a></nav>",
+      "css": "@font-face{font-family:Barlow;src:url('/fonts/barlow-400.ttf');font-weight:400}@font-face{font-family:Barlow;src:url('/fonts/barlow-500.ttf');font-weight:500}@font-face{font-family:Barlow;src:url('/fonts/barlow-600.ttf');font-weight:600}@font-face{font-family:'Barlow Condensed';src:url('/fonts/barlow-condensed-600-italic.ttf');font-weight:600;font-style:italic}.ds-nav{display:flex;flex-wrap:wrap;gap:30px;font:500 14px/1.55 Barlow,Arial,sans-serif;color:var(--charcoal,#1c1f22)}.ds-nav-link{padding:12px 0;color:inherit;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:7px}.ds-nav-link:hover{text-decoration-color:var(--charcoal,#1c1f22)}.ds-nav-link:focus-visible{outline:2px solid var(--charcoal,#1c1f22);outline-offset:5px}"
+    },
+    {
+      "name": "Divided package column",
+      "kind": "card",
+      "description": "Square package column, not a floating raised card.",
+      "html": "<article class=\"ds-package\"><h3 class=\"ds-package-title\">Bronze</h3><p class=\"ds-package-price\">Rp25.000<span class=\"ds-package-unit\">per kotak</span></p><p class=\"ds-package-note\">Sederhana, tetap istimewa.</p><ul class=\"ds-package-list\"><li>Nasi putih</li><li>1 protein utama</li><li>Air mineral</li></ul></article>",
+      "css": "@font-face{font-family:Barlow;src:url('/fonts/barlow-400.ttf');font-weight:400}@font-face{font-family:Barlow;src:url('/fonts/barlow-500.ttf');font-weight:500}@font-face{font-family:Barlow;src:url('/fonts/barlow-600.ttf');font-weight:600}@font-face{font-family:'Barlow Condensed';src:url('/fonts/barlow-condensed-600-italic.ttf');font-weight:600;font-style:italic}.ds-package{padding:24px;border-top:1px solid var(--line,#b9bfba);border-bottom:1px solid var(--line,#b9bfba);border-right:1px solid var(--line,#b9bfba);border-radius:0;background:var(--paper,#fbfaf6);color:var(--charcoal,#1c1f22);font:400 14px/1.55 Barlow,Arial,sans-serif}.ds-package-title{margin:0 0 20px;font:600 italic 36px/1 \"Barlow Condensed\",Arial,sans-serif}.ds-package-price{margin:0;font-size:32px;letter-spacing:-.025em;font-weight:500;line-height:1.2;font-variant-numeric:tabular-nums}.ds-package-unit{display:block;font-size:12px;letter-spacing:0;font-weight:400;color:var(--muted,#52615e);margin-top:3px}.ds-package-note{margin:18px 0}.ds-package-list{padding-left:16px;line-height:1.8}",
+      "refersTo": "package"
+    },
+    {
+      "name": "Daylight stage path",
+      "kind": "custom",
+      "description": "Selected stage marker on the dark structural path; no invented runtime.",
+      "html": "<div class=\"ds-path\" role=\"group\" aria-label=\"Jelajahi kebutuhan acara\"><button class=\"ds-stage\" type=\"button\" aria-pressed=\"true\"><span class=\"ds-path-line\" aria-hidden=\"true\"></span>Menu pilihan</button><button class=\"ds-stage\" type=\"button\" aria-pressed=\"false\"><span class=\"ds-path-line\" aria-hidden=\"true\"></span>Dalam satu kotak</button></div>",
+      "css": "@font-face{font-family:Barlow;src:url('/fonts/barlow-400.ttf');font-weight:400}@font-face{font-family:Barlow;src:url('/fonts/barlow-500.ttf');font-weight:500}@font-face{font-family:Barlow;src:url('/fonts/barlow-600.ttf');font-weight:600}@font-face{font-family:'Barlow Condensed';src:url('/fonts/barlow-condensed-600-italic.ttf');font-weight:600;font-style:italic}.ds-path{display:flex;gap:24px;padding:18px 24px;background:var(--charcoal,#1c1f22)}.ds-stage{flex:1;background:transparent;color:var(--stone,#d9dcd9);text-align:left;font:400 14px/1.55 Barlow,Arial,sans-serif;padding:8px 20px 8px 0;border:0;cursor:pointer}.ds-path-line{display:block;height:1px;background:var(--shadow-blue,#5b6b7c);width:90%;margin-bottom:13px;position:relative}.ds-path-line::after{content:\"\";position:absolute;left:0;top:-3px;width:7px;height:7px;border-radius:50%;background:var(--shadow-blue,#5b6b7c)}.ds-stage[aria-pressed=true]{color:var(--sunbeam,#d6a43a)}.ds-stage[aria-pressed=true] .ds-path-line,.ds-stage[aria-pressed=true] .ds-path-line::after{background:var(--sunbeam,#d6a43a)}.ds-stage:focus-visible{outline:2px solid var(--sunbeam,#d6a43a);outline-offset:5px}"
+    },
+    {
+      "name": "FAQ disclosure",
+      "kind": "custom",
+      "description": "Native disclosure with shared-divider character.",
+      "html": "<details class=\"ds-faq\"><summary class=\"ds-faq-summary\">Berapa minimum pemesanan?</summary><p class=\"ds-faq-answer\">Minimum 50 kotak untuk paket standar dan 100 kotak untuk Platinum.</p></details>",
+      "css": "@font-face{font-family:Barlow;src:url('/fonts/barlow-400.ttf');font-weight:400}@font-face{font-family:Barlow;src:url('/fonts/barlow-500.ttf');font-weight:500}@font-face{font-family:Barlow;src:url('/fonts/barlow-600.ttf');font-weight:600}@font-face{font-family:'Barlow Condensed';src:url('/fonts/barlow-condensed-600-italic.ttf');font-weight:600;font-style:italic}.ds-faq{border-top:1px solid var(--line,#b9bfba);border-bottom:1px solid var(--line,#b9bfba);padding:20px 0;color:var(--charcoal,#1c1f22);font:400 17px/1.55 Barlow,Arial,sans-serif}.ds-faq-summary{cursor:pointer;list-style-position:inside;font-weight:500;padding-right:20px;min-height:28px}.ds-faq-summary:focus-visible{outline:2px solid var(--charcoal,#1c1f22);outline-offset:5px}.ds-faq-answer{margin:14px 0 0;font-size:15px;color:var(--muted,#52615e);max-width:60ch}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Rumah Terbuka",
+    "overview": "A welcoming, daylight-filled room becomes the visual metaphor for catering with the familiarity of home. Continuous material sections, tall italic headings, and photographs at different scales create an open architectural rhythm rather than a collection of floating cards.\n\nThe built system is warm, direct, and professional. Food, package information, and consultation controls remain legible within the spatial composition. Photographs are explicitly illustrative; visual richness never stands in for evidence about clients, production, or certification. The selected replacement world is not the former green-and-cream identity.",
+    "keyCharacteristics": [
+      "Continuous limewashed and paper surfaces.",
+      "Charcoal structural cuts with a sunbeam light plane.",
+      "Self-hosted condensed italic display paired with calm Barlow text.",
+      "Square photography and near-square controls.",
+      "Honest captions and visible keyboard focus."
+    ],
+    "rules": [
+      {
+        "name": "The Light Plane Rule",
+        "body": "Sunbeam connects space and marks action; it is not a decorative gradient or a blanket card background.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Condensed italic carries invitations and major headings; normal Barlow carries decisions, labels, prices, and explanations.",
+        "section": "typography"
+      },
+      {
+        "name": "The Continuous Room Rule",
+        "body": "Separate information through material changes, measured spacing, and shared dividers before introducing isolated containers.",
+        "section": "layout"
+      }
+    ],
+    "dos": [
+      "**Do** use material changes and shared dividers to organize continuous sections.",
+      "**Do** use self-hosted condensed italic for major invitations and normal Barlow for operational detail.",
+      "**Do** keep image captions and illustration disclosures visible beside their photographs.",
+      "**Do** preserve visible focus, pressed states, and reduced-motion behavior.",
+      "**Do** follow the final mobile cascade rather than copying superseded declarations."
+    ],
+    "donts": [
+      "**Don't** replace square photo planes with generic rounded, shadowed cards.",
+      "**Don't** remove architectural section cuts merely because an automated detector labels them card accents.",
+      "**Don't** revive the discarded green-and-cream identity or turn the light plane into a decorative gradient.",
+      "**Don't** treat stock imagery as evidence of clients, certification, or actual delivered packages.",
+      "**Don't** make the landing page composition a mandatory template for every future surface."
+    ]
+  }
+}
